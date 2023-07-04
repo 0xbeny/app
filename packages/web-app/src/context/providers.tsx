@@ -4,13 +4,13 @@ import {
   JsonRpcProvider,
   Web3Provider,
 } from '@ethersproject/providers';
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import {
   LIVE_CONTRACTS,
   SupportedNetwork as sdkSupportedNetworks,
 } from '@aragon/sdk-client-common';
-import {useWallet} from 'hooks/useWallet';
+import { useWallet } from 'hooks/useWallet';
 import {
   alchemyApiKeys,
   CHAIN_METADATA,
@@ -19,12 +19,13 @@ import {
   SupportedChainID,
   SupportedNetworks,
 } from 'utils/constants';
-import {Nullable} from 'utils/types';
-import {useNetwork} from './network';
-import {translateToNetworkishName} from 'utils/library';
+import { Nullable } from 'utils/types';
+import { useNetwork } from './network';
+import { translateToNetworkishName } from 'utils/library';
+import { mainnet } from 'wagmi';
 
-const NW_ARB = {chainId: 42161, name: 'arbitrum'};
-const NW_ARB_GOERLI = {chainId: 421613, name: 'arbitrum-goerli'};
+const NW_ARB = { chainId: 42161, name: 'arbitrum' };
+const NW_ARB_GOERLI = { chainId: 421613, name: 'arbitrum-goerli' };
 
 /* CONTEXT PROVIDER ========================================================= */
 
@@ -48,9 +49,9 @@ type ProviderProviderProps = {
  * The web3 provider, however, is based on the conencted and wallet and will
  * therefore be null if no wallet is connected.
  */
-export function ProvidersProvider({children}: ProviderProviderProps) {
-  const {provider} = useWallet();
-  const {network} = useNetwork();
+export function ProvidersProvider({ children }: ProviderProviderProps) {
+  const { provider } = useWallet();
+  const { network } = useNetwork();
 
   const [infuraProvider, setInfuraProvider] = useState<Providers['infura']>(
     new InfuraProvider(NW_ARB, infuraApiKey)
@@ -63,7 +64,7 @@ export function ProvidersProvider({children}: ProviderProviderProps) {
   return (
     <ProviderContext.Provider
       // TODO: remove casting once useSigner has updated its version of the ethers library
-      value={{infura: infuraProvider, web3: (provider as Web3Provider) || null}}
+      value={{ infura: infuraProvider, web3: (provider as Web3Provider) || null }}
     >
       {children}
     </ProviderContext.Provider>
@@ -81,17 +82,17 @@ function getInfuraProvider(network: SupportedNetworks) {
     return new InfuraProvider(NW_ARB, infuraApiKey);
   } else if (network === 'arbitrum-test') {
     return new InfuraProvider(NW_ARB_GOERLI, infuraApiKey);
-  } else if (network === 'mumbai' || network === 'polygon') {
+  } else if (network === 'mumbai' || network === 'polygon' || network === 'apothem') {
     return new JsonRpcProvider(CHAIN_METADATA[network].rpc[0], {
       chainId: CHAIN_METADATA[network].id,
       name: translateToNetworkishName(network),
       ensAddress:
         LIVE_CONTRACTS[
           translateToNetworkishName(network) as sdkSupportedNetworks
-        ].ensRegistry,
+        ]?.ensRegistry,
     });
   } else {
-    return new InfuraProvider(CHAIN_METADATA[network].id, infuraApiKey);
+    return new InfuraProvider("mainnet", infuraApiKey)
   }
 }
 
@@ -121,6 +122,7 @@ export function useSpecificProvider(
 ): Providers['infura'] {
   const network = getSupportedNetworkByChainId(chainId) as SupportedNetworks;
 
+  console.log( network);
   const [infuraProvider, setInfuraProvider] = useState(
     getInfuraProvider(network)
   );

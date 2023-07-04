@@ -17,16 +17,41 @@ import {TransactionDetailProvider} from 'context/transactionDetail';
 import {WalletMenuProvider} from 'context/walletMenu';
 import {UseCacheProvider} from 'hooks/useCache';
 import {UseClientProvider} from 'hooks/useClient';
-import {infuraApiKey, walletConnectProjectID} from 'utils/constants';
+import {CHAIN_METADATA, infuraApiKey, walletConnectProjectID} from 'utils/constants';
 import App from './app';
 
 import {EthereumClient, w3mConnectors, w3mProvider} from '@web3modal/ethereum';
 import {Web3Modal} from '@web3modal/react';
-import {configureChains, createConfig, WagmiConfig} from 'wagmi';
+import {Chain, configureChains, createConfig, WagmiConfig} from 'wagmi';
 import {mainnet, goerli, polygon, polygonMumbai} from 'wagmi/chains';
 import {infuraProvider} from 'wagmi/providers/infura';
-
-const chains = [mainnet, goerli, polygon, polygonMumbai];
+const apothem:Chain={
+  id: 51,
+  name: "apothem",
+  network: "apothem",
+  nativeCurrency: {
+      name: "TXDC",
+      symbol: "TXDC",
+      decimals: 18,
+  },
+  rpcUrls: {
+      default: {
+          http: ["https://apothem.xdcrpc.com"],
+      },
+      public: {
+        http: ["https://apothem.xdcrpc.com"],
+    },
+  },
+  blockExplorers: {
+      default: {
+          name: "Apothem scan",
+          url: "https://apothem.blocksscan.io",
+      },
+      
+  },
+testnet: true,
+};
+const chains = [mainnet, goerli, polygon, polygonMumbai, apothem];
 
 const {publicClient} = configureChains(chains, [
   w3mProvider({projectId: walletConnectProjectID}),

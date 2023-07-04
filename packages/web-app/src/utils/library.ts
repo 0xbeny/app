@@ -1,5 +1,5 @@
 // Library utils / Ethers for now
-import {ApolloClient} from '@apollo/client';
+import { ApolloClient } from '@apollo/client';
 import {
   Client,
   DaoDetails,
@@ -21,8 +21,8 @@ import {NavigationDao} from 'context/apolloClient';
 import {BigNumber, BigNumberish, constants, ethers, providers} from 'ethers';
 import {TFunction} from 'react-i18next';
 
-import {getEtherscanVerifiedContract} from 'services/etherscanAPI';
-import {fetchTokenData} from 'services/prices';
+import { getEtherscanVerifiedContract } from 'services/etherscanAPI';
+import { fetchTokenData } from 'services/prices';
 import {
   BIGINT_PATTERN,
   CHAIN_METADATA,
@@ -41,10 +41,10 @@ import {
   ActionWithdraw,
   Input,
 } from 'utils/types';
-import {i18n} from '../../i18n.config';
-import {addABI, decodeMethod} from './abiDecoder';
-import {getTokenInfo} from './tokens';
-import {isAddress} from 'ethers/lib/utils';
+import { i18n } from '../../i18n.config';
+import { addABI, decodeMethod } from './abiDecoder';
+import { getTokenInfo } from './tokens';
+import { isAddress } from 'ethers/lib/utils';
 
 export function formatUnits(amount: BigNumberish, decimals: number) {
   if (amount.toString().includes('.') || !decimals) {
@@ -201,7 +201,7 @@ export async function decodeMintTokensToAction(
 
   try {
     // get token info
-    const {symbol, decimals} = await getTokenInfo(
+    const { symbol, decimals } = await getTokenInfo(
       daoTokenAddress,
       provider,
       CHAIN_METADATA[network].nativeCurrency
@@ -217,7 +217,7 @@ export async function decodeMintTokensToAction(
 
       // update new tokens count
       newTokens = newTokens.add(amount);
-      return {address, amount: Number(formatUnits(amount, decimals))};
+      return { address, amount: Number(formatUnits(amount, decimals)) };
     });
 
     //TODO: That's technically not correct. The minting could go to addresses who already hold that token.
@@ -587,6 +587,8 @@ export const translateToAppNetwork = (
       return 'mumbai';
     case 'matic':
       return 'polygon';
+    case "apothem":
+      return 'apothem';
   }
   return 'unsupported';
 };
@@ -612,6 +614,8 @@ export function translateToNetworkishName(
       return SdkSupportedNetworks.MAINNET;
     case 'goerli':
       return SdkSupportedNetworks.GOERLI;
+    case "apothem":
+      SdkSupportedNetworks.APOTHEM;
   }
 
   return 'unsupported';
@@ -667,7 +671,7 @@ export class Web3Address {
   // Static method to create an Address instance
   static async create(
     provider?: providers.Provider,
-    addressOrEns?: {address?: string; ensName?: string} | string
+    addressOrEns?: { address?: string; ensName?: string } | string
   ) {
     // Determine whether we are dealing with an address, an ENS name or an object containing both
     let addressToSet: string | undefined;
@@ -751,16 +755,16 @@ export class Web3Address {
       shorten: boolean;
       prioritize: 'ensName' | 'address';
     } = {
-      shorten: false,
-      prioritize: 'ensName',
-    }
+        shorten: false,
+        prioritize: 'ensName',
+      }
   ) {
     return options.prioritize === 'ensName'
       ? String(
-          this._ensName || options.shorten
-            ? shortenAddress(this._address)
-            : this._address
-        )
+        this._ensName || options.shorten
+          ? shortenAddress(this._address)
+          : this._address
+      )
       : String(this._address || this._ensName);
   }
 }

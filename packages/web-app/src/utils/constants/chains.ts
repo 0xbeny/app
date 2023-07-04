@@ -1,8 +1,8 @@
 /* SUPPORTED NETWORK TYPES ================================================== */
 
-import {infuraApiKey} from './api';
+import { infuraApiKey } from './api';
 
-export const SUPPORTED_CHAIN_ID = [1, 5, 137, 80001, 42161, 421613] as const;
+export const SUPPORTED_CHAIN_ID = [1, 5, 137, 80001, 42161, 421613, 51] as const;
 export type SupportedChainID = typeof SUPPORTED_CHAIN_ID[number];
 
 export function isSupportedChainId(
@@ -20,9 +20,10 @@ const SUPPORTED_NETWORKS = [
   'mumbai',
   'arbitrum',
   'arbitrum-test',
+  'apothem',
 ] as const;
 
-export type availableNetworks = 'mainnet' | 'goerli' | 'polygon' | 'mumbai';
+export type availableNetworks = 'mainnet' | 'goerli' | 'polygon' | 'mumbai' | 'apothem';
 
 export type SupportedNetworks =
   | typeof SUPPORTED_NETWORKS[number]
@@ -218,6 +219,24 @@ export const CHAIN_METADATA: ChainList = {
     alchemyApi: 'https://polygon-mumbai.g.alchemy.com/v2',
     supportsEns: false,
     ipfs: 'https://test.ipfs.aragon.network',
+  },
+  apothem: {
+    id: 51,
+    name: 'Apothem',
+    domain: 'L1 Blockchain',
+    logo: 'https://icons.llamao.fi/icons/chains/rsz_xdc.jpg',
+    explorer: 'https://apothem.blocksscan.io/',
+    testnet: true,
+    rpc: ['https://apothem.xdcrpc.com', 'wss://ews.apothem.network'],
+    nativeCurrency: {
+      name: 'Testnet XDC',
+      symbol: 'TXDC',
+      decimals: 18,
+    },
+    etherscanApi: 'https://apothem.blocksscan.io',
+    alchemyApi: '',
+    supportsEns: false,
+    ipfs: 'https://gateway.pinata.cloud',
   },
   unsupported: {
     id: 1,

@@ -16,6 +16,7 @@ export const SUBGRAPH_API_URL: SubgraphNetworkUrl = {
     'https://subgraph.satsuma-prod.com/qHR2wGfc5RLi6/aragon/osx-mumbai/version/v1.2.1/api',
   arbitrum: undefined,
   'arbitrum-test': undefined,
+  apothem: undefined,
   unsupported: undefined,
 };
 
@@ -33,6 +34,7 @@ export const alchemyApiKeys: AlchemyApiKeys = {
   polygon: import.meta.env.VITE_ALCHEMY_KEY_POLYGON_MAINNET as string,
   mumbai: import.meta.env.VITE_ALCHEMY_KEY_POLYGON_MUMBAI as string,
   unsupported: undefined,
+  apothem: undefined,
 };
 
 export const infuraApiKey = import.meta.env
@@ -51,6 +53,7 @@ export const ASSET_PLATFORMS: Record<SupportedNetworks, string | null> = {
   goerli: null,
   polygon: 'polygon-pos',
   mumbai: null,
+  apothem: null,
   unsupported: null,
 };
 

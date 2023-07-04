@@ -5,7 +5,7 @@ import {
 } from '@aragon/sdk-client-common';
 
 import {useNetwork} from 'context/network';
-import React, {createContext, useContext, useEffect, useState} from 'react';
+import React, {PropsWithChildren, createContext, useContext, useEffect, useState} from 'react';
 
 import {
   CHAIN_METADATA,
@@ -14,6 +14,7 @@ import {
 } from 'utils/constants';
 import {translateToAppNetwork, translateToNetworkishName} from 'utils/library';
 import {useWallet} from './useWallet';
+import { log } from 'console';
 
 interface ClientContext {
   client?: Client;
@@ -61,9 +62,11 @@ export const UseClientProvider: React.FC = ({children}) => {
         },
       },
     ];
-
+    console.log(LIVE_CONTRACTS);
+    console.log(translatedNetwork);
+    
     const contextParams: ContextParams = {
-      daoFactoryAddress: LIVE_CONTRACTS[translatedNetwork].daoFactory,
+      daoFactoryAddress: LIVE_CONTRACTS[translatedNetwork].daoFactory,// LIVE_CONTRACTS[translatedNetwork].daoFactory,
       network: translatedNetwork,
       signer: signer ?? undefined,
       web3Providers: CHAIN_METADATA[network].rpc[0],
